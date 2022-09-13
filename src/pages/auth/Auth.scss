@@ -1,0 +1,664 @@
+/* Register Page */
+
+.registerWrapper {
+    display: flex;
+    width: 100vw;
+    min-height: 100vh;
+    overflow: hidden;
+
+    .appName_wrapper {
+        flex: 1;
+        background-color: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        @mixin glitchCopy {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .glitch {
+            padding: 0;
+            margin: 0;
+            font-family: sans-serif;
+
+            position: relative;
+            color: #fff;
+            font-size: 4em;
+            letter-spacing: 0.5em;
+            -webkit-animation: tracking-in-expand 1s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+            animation: tracking-in-expand 1s cubic-bezier(0.215, 0.61, 0.355, 1) both, glitch-skew 1s infinite linear alternate-reverse;
+
+            &::before {
+                @include glitchCopy;
+                left: 2px;
+                text-shadow: -2px 0 #ff00c1;
+                clip: rect(44px, 450px, 56px, 0);
+                animation: glitch-anim 5s infinite linear alternate-reverse;
+            }
+
+            &::after {
+                @include glitchCopy;
+                left: -2px;
+                text-shadow: -2px 0 #ff00c1, 2px 2px #ff00c1;
+                clip: rect(44px, 450px, 56px, 0);
+                animation: glitch-anim2 5s infinite linear alternate-reverse;
+            }
+        }
+    }
+
+    .form_wrapper {
+        flex: 1;
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+
+        .regiterTitle {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #000;
+
+            .register_text {
+                font-family: sans-serif;
+                color: #fff;
+            }
+        }
+
+        .form_container {
+            padding: 20px;
+            display: flex;
+            min-height: 40vh;
+            width: 35vw;
+            border-radius: 7px;
+            align-items: flex-start;
+            justify-content: center;
+            flex-direction: column;
+
+            box-shadow: -6px -5px 84px 10px rgba(0, 0, 0, 0.69);
+            -webkit-box-shadow: -6px -5px 84px 10px rgba(0, 0, 0, 0.69);
+            -moz-box-shadow: -6px -5px 84px 10px rgba(0, 0, 0, 0.69);
+
+            .registerTitleContainer {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-top: -50px;
+            }
+
+            .inputField {
+                width: 100%;
+            }
+
+            .shiftLeft {
+                margin-left: -0.7px;
+            }
+
+            .buttonContainer {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .registrationError {
+                color: red;
+                font-size: 16px;
+                text-align: center;
+                width: 100%;
+                margin: 10px;
+            }
+
+            .login_routeText {
+                font-size: 17px;
+                color: #000;
+                margin: 5px;
+                margin-top: 10px;
+
+                .route_text {
+                    text-decoration: underline;
+                }
+            }
+        }
+
+        .shakeForm {
+            -webkit-animation: shake-horizontal 0.8s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+            animation: shake-horizontal 0.8s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+        }
+    }
+}
+
+@-webkit-keyframes shake-horizontal {
+
+    0%,
+    100% {
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+    }
+
+    10%,
+    30%,
+    50%,
+    70% {
+        -webkit-transform: translateX(-10px);
+        transform: translateX(-10px);
+    }
+
+    20%,
+    40%,
+    60% {
+        -webkit-transform: translateX(10px);
+        transform: translateX(10px);
+    }
+
+    80% {
+        -webkit-transform: translateX(8px);
+        transform: translateX(8px);
+    }
+
+    90% {
+        -webkit-transform: translateX(-8px);
+        transform: translateX(-8px);
+    }
+}
+
+@keyframes shake-horizontal {
+
+    0%,
+    100% {
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+    }
+
+    10%,
+    30%,
+    50%,
+    70% {
+        -webkit-transform: translateX(-10px);
+        transform: translateX(-10px);
+    }
+
+    20%,
+    40%,
+    60% {
+        -webkit-transform: translateX(10px);
+        transform: translateX(10px);
+    }
+
+    80% {
+        -webkit-transform: translateX(8px);
+        transform: translateX(8px);
+    }
+
+    90% {
+        -webkit-transform: translateX(-8px);
+        transform: translateX(-8px);
+    }
+}
+
+
+@-webkit-keyframes tracking-in-expand {
+    0% {
+        letter-spacing: -0.5em;
+        opacity: 0;
+    }
+
+    40% {
+        opacity: 0.6;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes tracking-in-expand {
+    0% {
+        letter-spacing: -0.5em;
+        opacity: 0;
+    }
+
+    40% {
+        opacity: 0.6;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes glitch-anim {
+    $steps: 20;
+
+    @for $i from 0 to $steps {
+        #{percentage($i*(1/$steps))} {
+            clip: rect(random(100) + px, 9999px, random(100) + px, 0);
+            transform: skew((random(100) / 100) + deg);
+        }
+    }
+}
+
+@keyframes glitch-anim2 {
+    $steps: 20;
+
+    @for $i from 0 to $steps {
+        #{percentage($i*(1/$steps))} {
+            clip: rect(random(100) + px, 9999px, random(100) + px, 0);
+            transform: skew((random(100) / 100) + deg);
+        }
+    }
+}
+
+@keyframes glitch-skew {
+    $steps: 10;
+
+    @for $i from 0 to $steps {
+        #{percentage($i*(1/$steps))} {
+            transform: skew((random(10) - 5) + deg);
+        }
+    }
+}
+
+
+@media screen and (max-width: 768px) {
+    .registerWrapper {
+        flex-direction: column;
+
+        .appName_wrapper {
+            flex: 0.7
+        }
+
+        .form_wrapper {
+            flex: 1.3;
+
+            .form_container {
+                width: 50vw;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .registerWrapper {
+        .appName_wrapper {
+            flex: 0.6;
+        }
+
+        .form_wrapper {
+            flex: 1.4;
+
+            .form_container {
+                width: 50vw;
+
+                .registerTitleContainer {
+
+                    .regiterTitle {
+
+                        .register_text {
+                            font-size: 1.5em;
+                        }
+                    }
+
+                }
+
+                .login_routeText {
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .registerWrapper {
+
+        .form_wrapper {
+
+            .form_container {
+                width: 60vw;
+
+                .registerTitleContainer {
+                    margin-top: -40px;
+
+                    .regiterTitle {
+
+                        .register_text {
+                            font-size: 1.1em;
+                        }
+                    }
+
+                }
+
+                .login_routeText {
+                    font-size: 12px;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 367px) {
+    .registerWrapper {
+
+        .appName_wrapper {
+            .glitch {
+                font-size: 3em;
+            }
+        }
+    }
+
+}
+
+
+
+
+
+/* Login  Page */
+
+.loginWrapper {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    flex-direction: row-reverse;
+
+    .appName_wrapper {
+        flex: 1;
+        background-color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+
+        .logo_text {
+            font-size: 8vw;
+            font-family: sans-serif;
+            font-weight: 900;
+            background-color: #000;
+            color: #fff;
+            display: block;
+            padding: 0.5em;
+            -webkit-animation: tracking-in-expand 1s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+            animation: tracking-in-expand 1s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+        }
+
+        .logo_text:nth-child(2) {
+            position: absolute;
+            background-color: #fff;
+            color: #000;
+            clip-path: inset(-1% -1% 50% -1%);
+        }
+    }
+
+    .login_formWrapper {
+        flex: 1;
+        background-color: #000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+
+        .login_formContainer {
+            padding: 20px;
+            display: flex;
+            min-height: 30vh;
+            width: 35vw;
+            border-radius: 7px;
+            align-items: flex-start;
+            justify-content: space-around;
+            flex-direction: column;
+            background-color: #fff;
+
+            box-shadow: -4px -28px 80px 8px rgba(255, 255, 255, 0.19);
+            -webkit-box-shadow: -4px -28px 80px 8px rgba(255, 255, 255, 0.19);
+            -moz-box-shadow: -4px -28px 80px 8px rgba(255, 255, 255, 0.19);
+
+            .loginTitleContainer {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-top: -55px;
+
+                .loginTitle {
+                    margin-bottom: 20px;
+                    padding: 10px;
+                    border-radius: 5px;
+                    background-color: #000;
+
+                    .login_text {
+                        font-family: sans-serif;
+                        color: #fff;
+                    }
+                }
+            }
+
+            .inputField {
+                width: 100%;
+            }
+
+            .shiftLeft {
+                margin-left: -0.7px;
+            }
+
+            .buttonContainer {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .loginError {
+                color: red;
+                font-size: 16px;
+                text-align: center;
+                width: 100%;
+                margin: 10px;
+            }
+
+            .register_routeText {
+                font-size: 17px;
+                color: #000;
+                margin: 5px;
+                margin-top: 10px;
+
+                .route_text {
+                    text-decoration: underline;
+                }
+            }
+        }
+
+        .shakeLoginForm {
+            -webkit-animation: shake-horizontal 0.8s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+            animation: shake-horizontal 0.8s cubic-bezier(0.455, 0.030, 0.515, 0.955) both;
+        }
+    }
+}
+
+@-webkit-keyframes shake-horizontal {
+
+    0%,
+    100% {
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+    }
+
+    10%,
+    30%,
+    50%,
+    70% {
+        -webkit-transform: translateX(-10px);
+        transform: translateX(-10px);
+    }
+
+    20%,
+    40%,
+    60% {
+        -webkit-transform: translateX(10px);
+        transform: translateX(10px);
+    }
+
+    80% {
+        -webkit-transform: translateX(8px);
+        transform: translateX(8px);
+    }
+
+    90% {
+        -webkit-transform: translateX(-8px);
+        transform: translateX(-8px);
+    }
+}
+
+@keyframes shake-horizontal {
+
+    0%,
+    100% {
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+    }
+
+    10%,
+    30%,
+    50%,
+    70% {
+        -webkit-transform: translateX(-10px);
+        transform: translateX(-10px);
+    }
+
+    20%,
+    40%,
+    60% {
+        -webkit-transform: translateX(10px);
+        transform: translateX(10px);
+    }
+
+    80% {
+        -webkit-transform: translateX(8px);
+        transform: translateX(8px);
+    }
+
+    90% {
+        -webkit-transform: translateX(-8px);
+        transform: translateX(-8px);
+    }
+}
+
+
+
+@-webkit-keyframes tracking-in-expand {
+    0% {
+        letter-spacing: -0.5em;
+        opacity: 0;
+    }
+
+    40% {
+        opacity: 0.6;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes tracking-in-expand {
+    0% {
+        letter-spacing: -0.5em;
+        opacity: 0;
+    }
+
+    40% {
+        opacity: 0.6;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .loginWrapper {
+        flex-direction: column;
+
+        .appName_wrapper {
+            flex: 0.7
+        }
+
+        .login_formWrapper {
+            flex: 1.3;
+        }
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .loginWrapper {
+        .appName_wrapper {
+            flex: 0.6;
+        }
+
+        .login_formWrapper {
+            flex: 1.4;
+
+            .login_formContainer {
+
+                .loginTitleContainer {
+
+                    .loginTitle {
+
+                        .login_text {
+                            font-size: 1.5em;
+                        }
+                    }
+
+                }
+
+                .register_routeText {
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .loginWrapper {
+        .appName_wrapper {
+            flex: 0.4;
+
+            .logo_text {
+                font-size: 10vw;
+            }
+        }
+
+        .login_formWrapper {
+            flex: 1.6;
+
+            .login_formContainer {
+                width: 55vw;
+
+                .loginTitleContainer {
+                    margin-top: -44px;
+
+                    .loginTitle {
+
+                        .login_text {
+                            font-size: 1.2em;
+                        }
+                    }
+
+                }
+
+                .register_routeText {
+                    font-size: 12px;
+                }
+            }
+        }
+    }
+}
