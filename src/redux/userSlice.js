@@ -6,7 +6,7 @@ const userSlice = createSlice({
         currentUser: null,
         isLoading: false,
         error: false,
-        errorMessage: "REg sample error"
+        errorMessage: "",
     },
     reducers: {
         loginStart: (state) => {
@@ -22,6 +22,11 @@ const userSlice = createSlice({
             state.error = true;
             state.errorMessage = action.payload;
         },
+        logOut: (state) => {
+            state.currentUser = null;
+            state.errorMessage = "";
+            state.error = false;
+        },
         clearError: (state) => {
             state.error = false;
             state.errorMessage = "";
@@ -29,5 +34,5 @@ const userSlice = createSlice({
     }
 });
 
-export const { loginStart, loginSuccess, loginFailure, clearError } = userSlice.actions
+export const { loginStart, loginSuccess, loginFailure, logOut, clearError } = userSlice.actions
 export default userSlice.reducer

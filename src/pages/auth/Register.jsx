@@ -3,8 +3,9 @@ import "./Auth.scss";
 import TextField from "@mui/material/TextField";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import Snackbar from '@mui/material/Snackbar';
 import {
   Button,
   FormControl,
@@ -20,8 +21,19 @@ import { useEffect } from "react";
 import { register } from "../../redux/apiCalls";
 import { clearError } from "../../redux/userSlice";
 import { useLayoutEffect } from "react";
+import MuiAlert from '@mui/material/Alert';
+
+const Alert = React.forwardRef(function Alert(
+  props,
+  ref,
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
+
 
 const Register = () => {
+  const navigate = useNavigate();
   const [values, setValues] = useState({
     name: "",
     password: "",
@@ -33,8 +45,21 @@ const Register = () => {
   const isLoading = useSelector((state) => state.user.isLoading);
   const error = useSelector((state) => state.user.error);
   const errorMessage = useSelector((state) => state.user.errorMessage);
+  const currentUser = useSelector((state) => state.user.currentUser);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const dispatch = useDispatch();
+
+  // routes to the home page when there's a user
+  useEffect(() => {
+    if(currentUser) {
+      setOpenSnackbar(true)
+      setTimeout(() => {
+        setOpenSnackbar(false)
+        navigate("/");
+      }, 1500); 
+    }
+  }, [currentUser]);
 
   useEffect(() => {
     if ((values.name?.trim()).length > 3 && values.password?.length > 5)
@@ -110,6 +135,18 @@ const Register = () => {
     register(dispatch, user);
     shakeIfValid();
   };
+
+  const closeSnackbar = () => {
+    setOpenSnackbar(false);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
+
 
   return (
     <div className="registerWrapper">
@@ -203,6 +240,11 @@ const Register = () => {
           {error && <p className="registrationError">{errorMessage}</p>}
         </div>
       </div>
+      <Snackbar open={openSnackbar} autoHideDuration={1500} onClose={closeSnackbar}>
+        <Alert onClose={closeSnackbar} severity="success" sx={{ width: '100%' }}>
+          Account created!
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

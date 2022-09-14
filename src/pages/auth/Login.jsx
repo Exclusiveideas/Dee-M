@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import TextField from "@mui/material/TextField";
 import Visibility from "@mui/icons-material/Visibility";
@@ -6,18 +6,27 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import {
   Button,
   FormControl,
-  FormHelperText,
   IconButton,
   InputAdornment,
   InputLabel,
-  MenuItem,
   OutlinedInput,
-  Select,
 } from "@mui/material";
 import './Auth.scss';
+import Snackbar from '@mui/material/Snackbar';
+import { login } from '../../redux/apiCalls';
+import { clearError } from '../../redux/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import MuiAlert from '@mui/material/Alert';
+
+const Alert = React.forwardRef(function Alert(
+  props,
+  ref,
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const Login = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [values, setValues] = useState({
     name: "",
     password: "",
@@ -25,12 +34,24 @@ const Login = () => {
   });
   const [buttonDisabled, setButtonDisabled] = useState(true);
   const [loginFailed, setLoginFailed, ] = useState(false);
-  const [loginError, setLoginError] = useState("");
+  const isLoading = useSelector((state) => state.user.isLoading);
+  const error = useSelector((state) => state.user.error);
+  const errorMessage = useSelector((state) => state.user.errorMessage);
+  const currentUser = useSelector((state) => state.user.currentUser);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
 
+  const dispatch = useDispatch();
+
+  // routes to the home page when there's a user
   useEffect(() => {
-    if((values.name?.trim()).length > 3 && values.password?.length > 5) setButtonDisabled(false);
-    else setButtonDisabled(true);
-  }, [values])
+    if(currentUser) {
+      setOpenSnackbar(true)
+      setTimeout(() => {
+        setOpenSnackbar(false)
+        navigate("/");
+      }, 1500); 
+    }
+  }, [currentUser]);
 
   useEffect(() => {
     if(loginFailed){
@@ -38,7 +59,43 @@ const Login = () => {
         setLoginFailed(false)
       }, 2000);
     }
-  }, [values])
+  }, [values, loginFailed])
+
+  useEffect(() => {
+    if ((values.name?.trim()).length > 3 && values.password?.length > 5)
+      setButtonDisabled(false);
+    else setButtonDisabled(true);
+  }, [values]);
+
+  // clears error when components mounts/ re-renders
+  useLayoutEffect(() => {
+    dispatch(clearError());
+  }, [dispatch]);
+
+  // disables button when loading
+  useLayoutEffect(() => {
+    if (isLoading) setButtonDisabled(true);
+    else setButtonDisabled(false);
+  }, [isLoading]);
+
+  const shakeIfValid = () => {
+    if (error) {
+      setLoginFailed (true);
+
+      setTimeout(() => {
+        setLoginFailed(false);
+      }, 2000);
+    }
+  };
+
+  useEffect(() => {
+    shakeIfValid();
+  }, [error]);
+
+  // clears error when input is focused
+  const onInputFocus = () => {
+    dispatch(clearError());
+  };
 
   const handlePasswordChange = (e) => {
     setValues({ ...values, password: e.target.value });
@@ -61,14 +118,29 @@ const Login = () => {
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
+    if (!values.name || !values.password) return;
 
+    const user = {
+      name: values.name,
+      password: values.password,
+    };
     // Submit form below
+    login(dispatch, user);
+    shakeIfValid();
   }
 
+  const closeSnackbar = () => {
+    setOpenSnackbar(false);
+  };
 
-  useEffect(() => {
-    // navigate("/auth/register");
-  }, [])
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
+
+
   
   return (
     <div className='loginWrapper'>
@@ -88,6 +160,7 @@ const Login = () => {
             id="outlined-helperText"
             onChange={handleNameChange}
             label="Name"
+            onFocus={onInputFocus}
           />
           <FormControl
             sx={{ m: 1 }}
@@ -102,6 +175,7 @@ const Login = () => {
               type={values.showPassword ? "text" : "password"}
               value={values.password}
               onChange={handlePasswordChange}
+              onFocus={onInputFocus}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -119,13 +193,18 @@ const Login = () => {
           </FormControl>
           <div className="buttonContainer">
             <Button disabled={buttonDisabled} onClick={handleSubmitForm} variant="contained" color="primary">
-              Success
+              Log In
             </Button>
           </div>
           <p className="register_routeText" >Don't have a Account? <Link to="/auth/register" className="route_text">Create an Account</Link></p>
-          {loginError && <p className="loginError" >{loginError}</p>}
+          {error && <p className="loginError">{errorMessage}</p>}
         </div>
       </div>
+      <Snackbar open={openSnackbar} autoHideDuration={1500} onClose={closeSnackbar}>
+        <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
+          Login successfully!
+        </Alert>
+      </Snackbar>
     </div>
   )
 }
