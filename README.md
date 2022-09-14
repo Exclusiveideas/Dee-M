@@ -5,6 +5,16 @@
 
 ![Screenshpt-02](https://firebasestorage.googleapis.com/v0/b/exclusiveideas-c9470.appspot.com/o/gitHub_pictures%2FDee-M%2FScreenshot%20from%202022-09-13%2005-16-09.png?alt=media&token=2cd1d708-4703-4d48-a36f-0db3f98438eb)
 
+## Brief Intro
+Dee-M is a social media application where user can create and share posts, and chat(one-on-one and in group chat) with other users. every user account has a user wall and every user has a Dee-M bot as a friend by default once the account is created. The bots main purpose is to guide the user towards an optimized and better usage of the application, **more info on this bot will be added**.
+
+## Stage
+Dee-M is in its **development stage** where the real-time messaging feature is being added.
+
+<br />
+<br/>
+<br />
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
