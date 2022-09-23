@@ -13,7 +13,9 @@ Dee-M is a social media application where user can create and share posts, and c
 [![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)](https://github.com/Exclusiveideas)
 [![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)](https://github.com/Exclusiveideas)
 [![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)](https://github.com/Exclusiveideas)
-[![MongoDB](https://img.shields.io/badge/Stripe-626CD9?style=for-the-badge&logo=Stripe&logoColor=white)](https://github.com/Exclusiveideas) <br />
+[![JWT badge](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)](https://github.com/Exclusiveideas)
+[![Stripe](https://img.shields.io/badge/Stripe-626CD9?style=for-the-badge&logo=Stripe&logoColor=white)](https://github.com/Exclusiveideas)
+[![Redux badge](https://img.shields.io/badge/Redux-593D88?style=for-the-badge&logo=redux&logoColor=white)](https://github.com/Exclusiveideas)  <br />
 
 **Front-end:** Reactjs, Material-UI, Redux <br />
 **Back-end:** Nodejs, Expressjs, JWT <br />
