@@ -1,0 +1,6 @@
+# client app
+/client/node_modules
+
+# server app
+/server/.env
+/server/node_modules
