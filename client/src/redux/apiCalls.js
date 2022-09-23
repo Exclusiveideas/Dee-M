@@ -1,23 +1,23 @@
-import { loginStart, loginFailure, loginSuccess } from './userSlice';
+import { authStart, authFailure, authSuccess } from './userSlice';
 import { publicReq } from '../axios';
 
 export const login = async(dispatch, user) => {
-    dispatch(loginStart());
+    dispatch(authStart());
     try{
         const res = await publicReq.post("/auth/login", user);
-        dispatch(loginSuccess(res.data))
+        dispatch(authSuccess(res.data))
     } catch(err) {
         console.log(err)
-        dispatch(loginFailure(err.response?.data))
+        dispatch(authFailure(err.response?.data))
     }
 }
 
 export const register = async(dispatch, user) => {
-    dispatch(loginStart());
+    dispatch(authStart());
     try{
         const res = await publicReq.post("/auth/register", user);
-        dispatch(loginSuccess(res.data))
+        dispatch(authSuccess(res.data))
     } catch(err) {
-        dispatch(loginFailure(err.response?.data))
+        dispatch(authFailure(err.response?.data))
     }
 } 

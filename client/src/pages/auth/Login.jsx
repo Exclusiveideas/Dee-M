@@ -1,26 +1,21 @@
-import React, { useState } from "react";
-import "./Auth.scss";
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import TextField from "@mui/material/TextField";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import Snackbar from '@mui/material/Snackbar';
 import {
   Button,
   FormControl,
-  FormHelperText,
   IconButton,
   InputAdornment,
   InputLabel,
-  MenuItem,
   OutlinedInput,
-  Select,
 } from "@mui/material";
-import { useEffect } from "react";
-import { register } from "../../redux/apiCalls";
-import { clearError } from "../../redux/userSlice";
-import { useLayoutEffect } from "react";
+import './Auth.scss';
+import Snackbar from '@mui/material/Snackbar';
+import { login } from '../../redux/apiCalls';
+import { clearError } from '../../redux/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
 import MuiAlert from '@mui/material/Alert';
 
 const Alert = React.forwardRef(function Alert(
@@ -30,18 +25,15 @@ const Alert = React.forwardRef(function Alert(
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-
-
-const Register = () => {
+const Login = () => {
   const navigate = useNavigate();
   const [values, setValues] = useState({
     name: "",
     password: "",
     showPassword: false,
-    gender: "Male",
   });
   const [buttonDisabled, setButtonDisabled] = useState(true);
-  const [registrationFailed, setRegistrationFailed] = useState(false);
+  const [loginFailed, setLoginFailed, ] = useState(false);
   const isLoading = useSelector((state) => state.user.isLoading);
   const error = useSelector((state) => state.user.error);
   const errorMessage = useSelector((state) => state.user.errorMessage);
@@ -62,6 +54,14 @@ const Register = () => {
   }, [currentUser]);
 
   useEffect(() => {
+    if(loginFailed){
+      setTimeout(() => {
+        setLoginFailed(false)
+      }, 2000);
+    }
+  }, [values, loginFailed])
+
+  useEffect(() => {
     if ((values.name?.trim()).length > 3 && values.password?.length > 5)
       setButtonDisabled(false);
     else setButtonDisabled(true);
@@ -70,7 +70,7 @@ const Register = () => {
   // clears error when components mounts/ re-renders
   useLayoutEffect(() => {
     dispatch(clearError());
-  }, []);
+  }, [dispatch]);
 
   // disables button when loading
   useLayoutEffect(() => {
@@ -80,10 +80,10 @@ const Register = () => {
 
   const shakeIfValid = () => {
     if (error) {
-      setRegistrationFailed(true);
+      setLoginFailed (true);
 
       setTimeout(() => {
-        setRegistrationFailed(false);
+        setLoginFailed(false);
       }, 2000);
     }
   };
@@ -97,17 +97,9 @@ const Register = () => {
     dispatch(clearError());
   };
 
-  const handlePasswordChange = (e) => {
-    setValues({ ...values, password: e.target.value });
-  };
-
-  const handleNameChange = (e) => {
-    setValues({ ...values, name: e.target.value });
-  };
-
-  const handleGenderChange = (e) => {
-    setValues({ ...values, gender: e.target.value });
-  };
+  const handleFormChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  }
 
   const handleMouseDownPassword = (e) => {
     e.preventDefault();
@@ -122,56 +114,42 @@ const Register = () => {
 
   const handleSubmitForm = (e) => {
     e.preventDefault();
-    let formGender =
-      values.gender === "Prefer not to say" ? "void" : values.gender;
-    if (!values.name || !values.password || !formGender) return;
+    if (!values.name || !values.password) return;
 
     const user = {
-      name: values.name,
+      username: values.name,
       password: values.password,
-      gender: formGender,
     };
     // Submit form below
-    register(dispatch, user);
+    login(dispatch, user);
     shakeIfValid();
-  };
+  }
 
   const closeSnackbar = () => {
     setOpenSnackbar(false);
   };
 
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenSnackbar(false);
-  };
-
-
+  
   return (
-    <div className="registerWrapper">
+    <div className='loginWrapper'>
       <div className="appName_wrapper">
-        <h1 className="glitch" data-text="DEE-M">
-          DEE-M
-        </h1>
+        <h1 className='logo_text'>DEE-M</h1>
+        <h1 className='logo_text'>DEE-M</h1>
       </div>
-      <div className="form_wrapper">
-        <div className={`form_container ${registrationFailed && "shakeForm"} `}>
-          <div className="registerTitleContainer">
-            <div className="regiterTitle">
-              <h1 className="register_text">SIGN UP</h1>
-            </div>
+      <div className="login_formWrapper">
+        <div className={`login_formContainer ${loginFailed && "shakeLoginForm"} `}>
+        <div className="loginTitleContainer">
+          <div className="loginTitle">
+          <h1 className="login_text">SIGN IN</h1>
+        </div>
           </div>
           <TextField
             className="inputField"
             id="outlined-helperText"
-            onChange={handleNameChange}
+            onChange={handleFormChange}
             label="Name"
+            name="name"
             onFocus={onInputFocus}
-            helperText={
-              values.name?.length <= 3 &&
-              "Name must be greater than 3 characters"
-            }
           />
           <FormControl
             sx={{ m: 1 }}
@@ -185,8 +163,9 @@ const Register = () => {
               id="outlined-adornment-password"
               type={values.showPassword ? "text" : "password"}
               value={values.password}
-              onChange={handlePasswordChange}
+              onChange={handleFormChange}
               onFocus={onInputFocus}
+              name="password"
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -201,52 +180,23 @@ const Register = () => {
               }
               label="Password"
             />
-            {values.password?.length <= 5 && (
-              <FormHelperText>
-                Password must be greater than 5 characters
-              </FormHelperText>
-            )}
-          </FormControl>
-          <FormControl sx={{ m: 1, minWidth: 120 }} className="shiftLeft">
-            <InputLabel id="demo-simple-select-helper-label">Gender</InputLabel>
-            <Select
-              labelId="demo-simple-select-helper-label"
-              id="demo-simple-select-helper"
-              value={values.gender}
-              label="Gender"
-              onChange={handleGenderChange}
-            >
-              <MenuItem value="Male">Male</MenuItem>
-              <MenuItem value="Female">Female</MenuItem>
-              <MenuItem value="Prefer not to say">Prefer not to say</MenuItem>
-            </Select>
           </FormControl>
           <div className="buttonContainer">
-            <Button
-              disabled={buttonDisabled}
-              onClick={handleSubmitForm}
-              variant="contained"
-              color="primary"
-            >
-              Register
+            <Button disabled={buttonDisabled} onClick={handleSubmitForm} variant="contained" color="primary">
+              Log In
             </Button>
           </div>
-          <p className="login_routeText">
-            Already have a Account?{" "}
-            <Link to="/auth" className="route_text">
-              Log In
-            </Link>
-          </p>
-          {error && <p className="registrationError">{errorMessage}</p>}
+          <p className="register_routeText" >Don't have a Account? <Link to="/auth/register" className="route_text">Create an Account</Link></p>
+          {error && <p className="loginError">{errorMessage}</p>}
         </div>
       </div>
       <Snackbar open={openSnackbar} autoHideDuration={1500} onClose={closeSnackbar}>
         <Alert onClose={closeSnackbar} severity="success" sx={{ width: '100%' }}>
-          Account created!
+          Login successfully!
         </Alert>
       </Snackbar>
     </div>
-  );
-};
+  )
+}
 
-export default Register;
+export default Login; 
