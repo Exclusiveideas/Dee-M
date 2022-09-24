@@ -1,8 +1,104 @@
-.topbar {
-    background-color: blue;
+
+.topbar_wrapper {
+    display: flex;
     width: 100%;
-    height: 50px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.topbar {
+    background-color: rgba(19, 19, 19, 0.911);
+    width: 100%;
+    height: 70px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.topbar_left {
+    flex: 1.5;
+    padding-left: 30px;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}  
+
+.avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    border: 1px solid white;
+    margin-right: 7px;
+    cursor: pointer;
+    transition: all 0.3s ease-in;
+}
+
+.avatar:hover {
+    transform: scale(1.05);
+}
+
+
+.topbar_center {
+    flex: 3;
+}
+
+.topbar_right {
+    flex: 0.8;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.topbar_iconContainer {
+    cursor: pointer;
+    border-radius: 45%;
+    padding: 7px;
+    margin: 12px;
+    height: 100%;
+    width: 100%;
+    transition: all 0.3s ease-in;
+}
+
+.topbar_iconContainer:hover {
+    background-color: rgba(128, 128, 128, 0.205);
+    transform: scale(1.1);
+}
+
+.topbar_iconContainer.active {
+    background-color: rgba(128, 128, 128, 0.205);
+    transform: scale(1.1);
+}
+
+.topbar_icon {
+    color: rgba(255, 255, 255, 0.87);
+}
+
+.topbar_moreOptions {
+    display: none;
+    flex-direction: column;
+    border-radius: 7px;
+    position: absolute;
+    top: 60px;
+    right: 30px;
+    width: 210px;
+    height: max-content;
+    background-color: rgb(70, 69, 69);
+    padding: 5px;
+}
+
+.topbar_moreOptions.open {
+    display: block;
+    transition: all 0.3s ease-in;
+}
+
+.options {
+    padding: 10px;
+    border-radius: 7px;
+    height: 100%;
+}
+
+.options:hover {
+    cursor: pointer;
+    background-color: rgb(77, 77, 77);
 }

@@ -1,3 +1,9 @@
+.messenger_Wrapper {
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
 .messenger {
     height: calc(100vh - 70px);
     display: flex;

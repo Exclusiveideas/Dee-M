@@ -108,7 +108,7 @@ const MessengerComponents = () => {
   // }, [messages]);
 
   return (
-    <>
+    <div className="messenger_Wrapper">
       <TopBar />
       <div className="messenger">
         <div className="chatMenu">
@@ -165,7 +165,7 @@ const MessengerComponents = () => {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
