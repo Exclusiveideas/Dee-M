@@ -5,12 +5,15 @@ import noImage from "../../assets/images/fiverr.png";
 
 const Message = ({ message, own }) => {
   return (
-    <div className={own ? "message own" : "message"}>
-      <div className="message_top">
+    <div className="message">
+      <div className={`${own !== "me" && "own"} message_detailsCont `}>
         <img src={noImage} alt="message" className="message_image" />
-        <p className="message_text">{message?.text}</p>
+        <div className="message_Info">
+          <p className="message_text">lorem hi how are you doing? Lorem ipsum dolor.</p>
+          {/* <div className="message_date">{format(message?.createdAt)}</div> */}
+          <div className="message_date">12/22/33</div>
+        </div>
       </div>
-      {/* <div className="message_bottom">{format(message?.createdAt)}</div> */}
     </div>
   );
 };

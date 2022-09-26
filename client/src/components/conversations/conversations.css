@@ -4,11 +4,17 @@
     padding: 10px;
     cursor: pointer;
     margin-top: 20px;
+    margin-right: 10px;
+    min-width: 260px;
 }
 
 .conversation:hover {
-    background-color: rgb(245, 243, 243);
+    background-color: rgba(29, 29, 29, 0.486);
+}
 
+.conversation_imageCont {
+    position: relative;
+    width: 50px;
 }
 
 .conversation_image {
@@ -17,8 +23,52 @@
     border-radius: 50%;
     object-fit: cover;
     margin-right: 20px;
+    border: 1px solid rgb(206, 206, 206);
+    transition: all 0.3s ease-in;
+}
+
+.conversation_image:hover {
+    transform: scale(1.1);
+}
+
+.online_badge {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: rgb(32, 236, 32);
+    border-radius: 50%;
+    bottom: 5px;
+    right: 9px;
+}
+
+.conversation_rightInfo {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    width: 100%;
+    padding: 5px;
+}
+
+.rightInfo_top {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .conversation_name {
     font-weight: 500;
+}
+
+.last_messageDate {
+    font-weight: 200;
+    color: rgb(206, 206, 206);
+    font-size: 13px;
+}
+
+.last_message {
+    margin-top: 4px;
+    font-size: 13px;
+    font-style: italic;
+    color: rgb(206, 206, 206);
 }

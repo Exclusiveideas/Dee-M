@@ -1,0 +1,70 @@
+.friendRequest {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: rgba(29, 29, 29, 0.486);
+    margin-top: 15px;
+    border-radius: 7px;
+}
+
+.friendRequest_imageCont {
+    width: 50px;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.friendRequest_img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid rgb(206, 206, 206);
+    transition: all 0.3s ease-in;
+}
+
+.friendRequest_img:hover {
+    transform: scale(1.1);
+}
+
+.friendRequest_info {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    width: 100%;
+}
+
+.friendRequest_name {
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.request_buttonCont {
+    margin-top: 5px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.request_button {
+    padding: 8px;
+    border-radius: 3px;
+    border: none;
+    margin-right: 5px;
+    min-width: 80px;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: rgb(161, 64, 64, 0.77);
+    cursor: pointer;
+}
+
+.request_button:hover {
+    background-color: rgb(161, 64, 64);
+}
+
+.request_button.accept {
+    background-color: rgba(86, 86, 231, 0.77);
+}
+
+.request_button.accept:hover {
+    background-color: rgba(86, 86, 231);
+}

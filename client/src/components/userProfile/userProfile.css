@@ -1,0 +1,37 @@
+
+.dialog_wrapper {
+    width: 50%;
+    padding: 20px;
+    background-color: white;
+    min-height: 70%;
+    border-radius: 10px;
+    color: rgba(29, 29, 29, 0.87);
+}
+
+.dialog_top_container {
+    padding: 5px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.dialog_title {
+    width: 100%;
+    text-align: center;
+}
+
+.closeDialog_icon_container {
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease-in;
+}
+
+.closeDialog_icon_container:hover {
+    background-color: rgba(180, 180, 180, 0.541);
+    cursor: pointer;
+}

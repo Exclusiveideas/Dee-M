@@ -7,12 +7,11 @@ const TopBar = () => {
   const [openOptions, setOpenOptions] = useState(false);
 
   const currentUser = useSelector(state => state.user?.currentUser);
-  // console.log(currentUser)
 
   const toggleOpenOptions = () => {
     setOpenOptions(!openOptions)
   }
-  
+   
   return (
     <div className="topbar_wrapper">
       <div className='topbar'>

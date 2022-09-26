@@ -75,7 +75,7 @@
 }
 
 .topbar_moreOptions {
-    display: none;
+    display: block;
     flex-direction: column;
     border-radius: 7px;
     position: absolute;
@@ -85,11 +85,13 @@
     height: max-content;
     background-color: rgb(70, 69, 69);
     padding: 5px;
+    transform: scale(0);
+    transition: all 0.3s ease-in;
+    z-index: 100;
 }
 
 .topbar_moreOptions.open {
-    display: block;
-    transition: all 0.3s ease-in;
+    transform: scale(1);
 }
 
 .options {
@@ -101,4 +103,23 @@
 .options:hover {
     cursor: pointer;
     background-color: rgb(77, 77, 77);
+}
+
+@media screen and (max-width: 400px) {
+    .topbar_left {
+        padding-left: 10px;
+    }
+    
+    .topbar_right {
+        justify-content: flex-end;
+    }
+
+    .topbar_iconContainer {
+        margin: 5px;
+    }
+
+    .topbar_moreOptions {
+        top: 60px;
+        right: 5px;
+    }
 }
