@@ -1,19 +1,43 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./message.css";
-import noImage from "../../assets/images/fiverr.png";
-// import { format } from 'timeago.js';
+import { publicReq } from "../../axios";
+import { useState } from "react";
+import { format } from "timeago.js";
 
 const Message = ({ message, own }) => {
+  const [senderDetails, setSenderDetails] = useState(null);
+
+  useEffect(() => {
+    const fetchSenderDetails = async () => {
+      try {
+        const res = await publicReq.get("/users?userId=" + message?.senderId);
+        setSenderDetails(res?.data);
+      } catch (err) {
+        console.log("error fetching sender details: ", err);
+      }
+    };
+    message.senderId && fetchSenderDetails();
+  }, [message]);
+
   return (
     <div className="message">
-      <div className={`${own !== "me" && "own"} message_detailsCont `}>
-        <img src={noImage} alt="message" className="message_image" />
-        <div className="message_Info">
-          <p className="message_text">lorem hi how are you doing? Lorem ipsum dolor.</p>
-          {/* <div className="message_date">{format(message?.createdAt)}</div> */}
-          <div className="message_date">12/22/33</div>
+      {senderDetails ? (
+        <div className={`${own && "own"} message_detailsCont `}>
+          <img
+            src={`https://avatars.dicebear.com/api/${senderDetails?.avatar}/${senderDetails?.username}.svg`}
+            alt="message sender avatar"
+            className="message_image"
+          />
+          <div className="messageInfo_wrapper">
+            <div className="message_Info">
+              <p className="message_text">{message.text}</p>
+            </div>
+            <div className="message_date">{format(message?.createdAt)}</div>
+          </div>
         </div>
-      </div>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

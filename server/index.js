@@ -2,7 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require("cors");
 const dotenv = require("dotenv");
-const authRoutes = require("./routes/auth.js");
+const authRoute = require("./routes/auth.js");
+const conversationsRoute = require("./routes/conversations.js");
+const messagesRoute = require("./routes/messages.js");
+const usersRoute = require("./routes/users.js");
 
 dotenv.config();
 const app = express();
@@ -29,7 +32,10 @@ app.use(express.json());
 app.get("/", (req, res) => {
     res.send("Dee-M running")
 })
-app.use("/api/auth", authRoutes);
+app.use("/api/auth", authRoute);
+app.use("/api/conversations", conversationsRoute);
+app.use("/api/messages", messagesRoute);
+app.use("/api/users", usersRoute);
 
 const PORT = process.env.PORT || 5001;
 

@@ -4,3 +4,7 @@
 # server app
 /server/.env
 /server/node_modules
+
+# socket server
+/server/.env
+/socket/node_modules

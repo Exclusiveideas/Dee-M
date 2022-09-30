@@ -15,4 +15,4 @@ const DiscoverFriends = ({ onClose }) => {
   )
 }
 
-export default DiscoverFriends
+export default DiscoverFriends;

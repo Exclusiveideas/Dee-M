@@ -4,222 +4,135 @@ import Conversations from "../conversations";
 import Message from "../message";
 import TopBar from "../topbar";
 import "./messenger.css";
-import axios from "axios";
 import { io } from "socket.io-client";
 import { useSelector } from "react-redux";
-import noImage from "../../assets/images/fiverr.png";
 import { Send, AttachFile, InsertEmoticon, Close } from "@mui/icons-material";
-import DialogTitle from "@mui/material/DialogTitle";
-import Dialog from "@mui/material/Dialog";
 import Backdrop from "@mui/material/Backdrop";
 import DiscoverFriends from "../discoverFriends";
 import UserProfile from "../userProfile";
+import { publicReq } from "../../axios";
 
 const MessengerComponents = () => {
-  const [conversations, setConversations] = useState([
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-  ]);
-  const [friendRequests, setFriendRequests] = useState([
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-  ]);
+  const [conversations, setConversations] = useState([]);
+  const [friendRequests, setFriendRequests] = useState([]);
   const [currentChat, setCurrentChat] = useState(null);
-  const [messages, setMessages] = useState([
-    "me",
-    "y",
-    "me",
-    "y",
-    "me",
-    "me",
-    "y",
-    "me",
-    "me",
-    "y",
-    "me",
-    "me",
-    "y",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "y",
-    "me",
-    "me",
-    "me",
-    "me",
-    "y",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-    "me",
-  ]);
+  const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [currentDialog, setCurrentDialog] = useState();
   const scrollRef = useRef(null);
-  // const socket = useRef();
+  const socket = useRef(null);
 
   const currentUser = useSelector((state) => state.user?.currentUser);
-  // useEffect(() => {
-  //   socket.current = io("ws://localhost:8900");
-  //   socket.current?.on("getMessage", (data) => {
-  //     setArrivalMessage({
-  //       sender: data.senderId,
-  //       text: data.text,
-  //       createdAt: Date.now(),
-  //     });
-  //   });
-  // }, []);
+  
+  // connect to socket
+  useEffect(() => {
+    if(!currentUser) return
+    socket.current = io("ws://localhost:8900");
+  }, [])
 
-  // useEffect(() => {
-  //   arrivalMessage &&
-  //     currentChat?.members?.includes(arrivalMessage.senderId) &&
-  //     setMessages((prev) => [...prev, arrivalMessage]);
-  // }, [arrivalMessage, currentChat]);
+  
+  useEffect(() => {
+    socket.current?.emit("sendUserId", currentUser?._id);
+    socket.current?.on("getUsers", users => {
+      setOnlineUsers(users.filter(user => user?.userId !== currentUser?._id))
+    });
 
-  // useEffect(() => {
-  //   socket.current?.emit("addUser", user?._id);
-  //   socket.current?.on("getUsers", (users) => {
-  //     setOnlineUsers(users?.followings?.filter(f => users?.some(u => u?.userId === f)));
-  //   });
-  // }, [user]);
+    socket.current?.on("getMessage", data => {
+      setArrivalMessage({
+        senderId: data?.senderId,
+        text: data?.text,
+        createdAt: Date.now()
+      })
+    })
+  }, [currentUser])
 
-  // useEffect(() => {
-  //   const getConversations = async () => {
-  //     try {
-  //       const res = await axios.get("/conversations/" + user._id);
-  //       setConversations(res.data);
-  //     } catch (err) {
-  //       console.log("Error etching conversation", err);
-  //     }
-  //   };
-  //   getConversations();
-  // }, [user?._id]);
+  // update messages with the newly sent message
+  useEffect(() => {
+    arrivalMessage && currentChat?.members?.includes(arrivalMessage?.senderId) && setMessages(prevState => ([...prevState, arrivalMessage]));
+  }, [arrivalMessage, currentChat])
 
-  // useEffect(() => {
-  //   const getMessages = async () => {
-  //     try {
-  //       const res = await axios.get("/messages/" + currentChat?._id);
-  //       setMessages(res?.data);
-  //     } catch (err) {
-  //       console.log("Error fetching messages >> ", err);
-  //     }
-  //   };
-  //   getMessages();
-  // }, [currentChat])
+  // get all conversation's user has partaken
+  useEffect(() => {
+    const getConversation = async () => {
+      try {
+        const res = await publicReq.get("/conversations/" + currentUser?._id);
+        setConversations(res?.data);
+      } catch (err) {
+        console.log("Error fetching conversations: ", err);
+      }
+    };
+    getConversation();
+  }, []);
 
+  // get all messages in a partcular conversation
+  useEffect(() => {
+    if (!currentChat) return;
+    const getConversationMessages = async () => {
+      try {
+        const res = await publicReq.get("/messages/" + currentChat?._id);
+        setMessages(res?.data);
+      } catch (error) {
+        console.log("Error fetching conversation's messages: ", error);
+      }
+    };
+
+    getConversationMessages();
+  }, [currentChat]);
+
+  // fetch current user's updated info
+  useEffect(() => {
+    const fetchCurrentUserDetails = async () => {
+      try {
+        const res = await publicReq.get("/users?userId=" + currentUser?._id);
+        setFriendRequests(res?.data?.friendRequest);
+      } catch (err) {
+        console.log("error fetching current user's details: ", err);
+      }
+    };
+    fetchCurrentUserDetails();
+  }, []);
+
+  // submit message
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
 
-    //   const message = {
-    //     sender: user?._id,
-    //     text: newMessage,
-    //     conversationId: currentChat?._id,
-    //   };
+    const message = {
+      conversationId: currentChat?._id,
+      senderId: currentUser?._id,
+      text: newMessage,
+    };
 
-    //   const receiverId = currentChat.members.find(
-    //     (member) => member !== user?._id
-    //   );
+    const receiverId = currentChat.members?.find(member => member !== currentUser?._id)
 
-    // socket.current?.emit("sendMessage", {
-    //   senderId: user?._id,
-    //   receiverId,
-    //   text: newMessage,
-    // });
+    socket.current?.emit("sendMessage", {
+      senderId: currentUser?._id,
+      receiverId,
+      text: newMessage
+    })
 
-    //   try {
-    //     const res = await axios.post("/messages", message);
-    //     setMessages([...messages, res.data]);
-    //     setNewMessage("");
-    //   } catch (err) {
-    //     console.log("Error sending message >> ", err);
-    //   }
+    setMessages(prev => [...prev, {
+      senderId: currentUser?._id,
+      text: newMessage,
+      createdAt: Date.now(),
+    }]);
+
+    try {
+      await publicReq.post("/messages", message);
+    } catch (error) {
+      console.log("error submiting message: ", error);
+    }
+
+    setNewMessage("");
   };
 
-  // useEffect(() => {
-  //   scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-  // }, [messages]);
+  // scroll to bottom of messages
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   const handleDialogClose = (e, reason) => {
     if (reason === "backdropClick") return;
@@ -244,6 +157,10 @@ const MessengerComponents = () => {
     }
   };
 
+  const extractFriendId = (conversation) => {
+    return conversation?.members?.find((m) => m !== currentUser?._id)
+  }
+
   return (
     <div className="messenger_Wrapper">
       <TopBar />
@@ -266,6 +183,8 @@ const MessengerComponents = () => {
                     conversation={c}
                     currentUser={currentUser}
                     handleOpenDialog={handleOpenDialog}
+                    friendId={extractFriendId(c)}
+                    online={onlineUsers.some(o => o?.userId === (extractFriendId(c)))}
                   />
                 </div>
               ))}
@@ -278,11 +197,14 @@ const MessengerComponents = () => {
               <>
                 <div className="chatBox_top">
                   {messages?.map((m, i) => (
-                    <div key={i} ref={scrollRef}>
-                      {/* <Message message={m} own={m?.sender === user?._id} /> */}
-                      <Message own={m} />
+                    <div key={i}>
+                      <Message
+                        message={m}
+                        own={m?.senderId === currentUser?._id}
+                      />
                     </div>
                   ))}
+                  <div ref={scrollRef}></div>
                 </div>
                 <div className="chatBox_bottom">
                   <div className="chatMessage_inputCont">
@@ -317,7 +239,11 @@ const MessengerComponents = () => {
           <div className="all_friend_requests">
             <h3 className="friend_requestTitle">Friend Requests</h3>
             {friendRequests?.map((f, i) => (
-              <FriendRequest key={i} handleOpenDialog={handleOpenDialog} />
+              <FriendRequest
+                requestId={f}
+                key={i}
+                handleOpenDialog={handleOpenDialog}
+              />
             ))}
           </div>
           <div className="discover_newFriends">

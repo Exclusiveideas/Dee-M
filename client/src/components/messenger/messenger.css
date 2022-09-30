@@ -35,7 +35,7 @@
     flex-direction: column;
     align-items: flex-start;
     width: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
     max-height: 81vh;
     margin-top: 5px;
 }
@@ -50,20 +50,24 @@
     justify-content: space-between;
     max-height: 100%;
     position: relative;
+    height: 100%;
+    width: 100%;
 }
 
 .chatBox_top {
-    height: 100%;
-    overflow-y: scroll;
+    height: 88%;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .chatBox_bottom {
-    margin-top: 5px;
-    padding: 5px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     min-height: 60px;
+    bottom: 0;
+    width: 100%;
+    position: absolute;
 }
 
 .chatMessage_inputCont {
@@ -72,7 +76,8 @@
     display: flex;
     padding: 7px;
     align-items: center;
-    width: 100%;
+    flex: 1;
+    margin-left: 5px;
     cursor: pointer;
 }
 
@@ -104,7 +109,7 @@
 
 
 .chatMessage_input {
-    padding: 10px;
+    padding: 7px;
     outline: none;
     border: 20px;
     width: 100%;
@@ -112,14 +117,15 @@
 }
 
 .chatSubmitButton {
-    width: 50px;
-    height: 46px;
+    width: 45px;
+    height: 45px;
     border: none;
     border-radius: 50%;
     cursor: pointer;
     background-color: teal;
     color: white;
     margin-left: 10px;
+    margin-right: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -127,6 +133,7 @@
 
 .chatSubmit_icon {
     transform: rotate(-40deg);
+    font-size: 20px;
 }
 
 
@@ -151,7 +158,7 @@
 
 .all_friend_requests {
     height: 87%;
-    overflow-y: scroll;
+    overflow-y: auto;
     padding: 8px;
 }
 
@@ -181,7 +188,6 @@
     font-size: 15px;
     cursor: pointer;
     outline: none;
-    /* transition: all 0.3s ease-in; */
     background-color: rgba(24, 121, 211, 0.795);
     color: rgba(255, 255, 255, 0.87);
 }

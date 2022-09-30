@@ -1,38 +1,28 @@
 import React, { useEffect, useState } from "react";
+import { publicReq } from "../../axios";
 import "./FriendRequest.css";
-import noAvatar from "../../assets/images/fiverr.png";
-import axios from "axios";
-import { useSelector } from "react-redux";
 
-const FriendRequest = ({ onlineUsers, currentId, setCurrentChat, handleOpenDialog }) => {
-  const [friends, setFriends] = useState([]);
-  const [friendRequests, setFriendRequests] = useState(["me", "me","me", "me","me","me","me", "me","me","me","me", "me","me","me","me", "me","me","me","me", "me","me","me","me", "me","me", "me","me", "me","me",  "me","me", "me","me", "me","me", "me",]);
-
-  const currentUser = useSelector(state => state.user?.currentUser);
+const FriendRequest = ({ requestId, handleOpenDialog }) => {
+  const [userDetails, setUserDetails] = useState(null);
 
   useEffect(() => {
-    // get user's friends
-    // const getFriends = async () => {
-    //   const res = await axios.get("/users/friends" + currentId);
-    //   setFriends(res?.data);
-    // };
-    // getFriends();
-  }, [currentId]);
+    const fetchUserDetails = async () => {
+      try{
+        const res = await publicReq.get("/users?userId="+ requestId);
+        setUserDetails(res?.data);
+      } catch(err) {
+        console.log("error fetching current user's details: ", err);
+      }
 
-  useEffect(() => {
-    // setFriendRequests(friends?.filter((f) => onlineUsers?.includes(f._id)));
-  }, [friends, onlineUsers]);
+    }
+    fetchUserDetails();
+  }, []);
 
-
-  const handleImageClick = (e) => {
-    // handleOpenDialog(e)
-  }
- 
   return (
     <div className="friendRequest">
       <div className="friendRequest_imageCont">
         <img
-            src={`https://avatars.dicebear.com/api/${currentUser?.avatar}/${currentUser?.username}.svg`}
+            src={`https://avatars.dicebear.com/api/${userDetails?.avatar}/${userDetails?.username}.svg`}
               alt="pending_friend"
               className="friendRequest_img"
               onClick={handleOpenDialog}
@@ -40,7 +30,7 @@ const FriendRequest = ({ onlineUsers, currentId, setCurrentChat, handleOpenDialo
         />
         </div>
         <div className="friendRequest_info">
-          <p className="friendRequest_name">{currentUser?.username}</p>
+          <p className="friendRequest_name">{userDetails?.username}</p>
           <div className="request_buttonCont">
             <button className="request_button accept">Accept</button>
             <button className="request_button">Reject</button>
