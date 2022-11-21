@@ -6,7 +6,7 @@
 ![Screenshpt-02](https://firebasestorage.googleapis.com/v0/b/exclusiveideas-c9470.appspot.com/o/gitHub_pictures%2FDee-M%2Fdee-m_register.png?alt=media&token=3f885363-881b-49fe-ab16-cb3486fa10f4)
 
 ## Brief Intro
-Dee-M is a messaging platform where user can chat(one-on-one and in group chat) with other users in realtime. Features like video call, voice call, picture and files sharing, friend requests, discover new friends are included..
+Dee-M is a messaging platform where user can chat(one-on-one and in group chat) with other users in realtime. Features like friend requests, discover new friends are included..
 
 ## Stack
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://github.com/Exclusiveideas)
@@ -25,7 +25,7 @@ Dee-M is in its **development stage** where the real-time messaging feature is b
 
 ## Installation Steps 
 **1. First clone the project by running** <br />
-   ``` git clone https://github.com/<your-username>/Dee-M.git ```
+   ``` git clone https://github.com/Exclusiveideas/Dee-M.git ```
 <br />
 
 **2. Go into thr project directory**  <br />
