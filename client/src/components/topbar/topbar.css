@@ -24,6 +24,10 @@
     height: 100%;
 }  
 
+.topBar_imageContainer {
+    position: relative;
+}
+
 .avatar {
     width: 45px;
     height: 45px;
@@ -104,6 +108,13 @@
     cursor: pointer;
     background-color: rgb(77, 77, 77);
 }
+
+.call_dialog_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 
 @media screen and (max-width: 400px) {
     .topbar_left {

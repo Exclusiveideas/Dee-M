@@ -7,6 +7,9 @@ const userSlice = createSlice({
         isLoading: false,
         error: false,
         errorMessage: "",
+        currentChat: null,
+        isSendingMessage: false,
+        socket: null,
     },
     reducers: {
         authStart: (state) => {
@@ -30,9 +33,18 @@ const userSlice = createSlice({
         clearError: (state) => {
             state.error = false;
             state.errorMessage = "";
+        },
+        updateCurrentChat: (state, action) => {
+            state.currentChat = action.payload
+        },
+        sendingMessage: (state, action) => {
+            state.isSendingMessage = action.payload
+        },
+        updateSocket: (state, action) => {
+            state.socket = action.payload
         }
     }
 });
 
-export const { authStart, authSuccess, authFailure, logOut, clearError } = userSlice.actions
+export const { authStart, authSuccess, authFailure, logOut, clearError, updateCurrentChat, updateSocket, sendingMessage } = userSlice.actions
 export default userSlice.reducer

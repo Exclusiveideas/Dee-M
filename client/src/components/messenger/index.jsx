@@ -5,17 +5,17 @@ import Message from "../message";
 import TopBar from "../topbar";
 import "./messenger.css";
 import { io } from "socket.io-client";
-import { useSelector } from "react-redux";
-import { Send, AttachFile, InsertEmoticon, Close } from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
+import { Send, AttachFile, InsertEmoticon, TempleHinduRounded } from "@mui/icons-material";
 import Backdrop from "@mui/material/Backdrop";
 import DiscoverFriends from "../discoverFriends";
 import UserProfile from "../userProfile";
 import { publicReq } from "../../axios";
+import { sendingMessage, updateCurrentChat, updateSocket } from "../../redux/userSlice";
 
 const MessengerComponents = () => {
   const [conversations, setConversations] = useState([]);
   const [friendRequests, setFriendRequests] = useState([]);
-  const [currentChat, setCurrentChat] = useState(null);
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [arrivalMessage, setArrivalMessage] = useState(null);
@@ -23,24 +23,42 @@ const MessengerComponents = () => {
   const [openDialog, setOpenDialog] = useState(false);
   const [currentDialog, setCurrentDialog] = useState();
   const scrollRef = useRef(null);
-  const socket = useRef(null);
+  // const socket = useRef(null);
+  const dispatch = useDispatch();
 
   const currentUser = useSelector((state) => state.user?.currentUser);
+  const currentChat = useSelector((state) => state.user?.currentChat);
+  const socket = useSelector((state) => state.user?.socket);
+
+  // get all messages in a partcular conversation
+  useEffect(() => {
+    if (!currentChat) return;
+    const getConversationMessages = async () => {
+      try {
+        const res = await publicReq.get("/messages/" + currentChat?._id);
+        setMessages(res?.data);
+      } catch (error) {
+        console.log("Error fetching conversation's messages: ", error);
+      }
+    };
+    getConversationMessages();
+  }, [currentChat])
   
   // connect to socket
   useEffect(() => {
-    if(!currentUser) return
-    socket.current = io("ws://localhost:8900");
+    // if(!currentUser) return
+    // const socketConnection = io("ws://localhost:5001");
+    // dispatch(updateSocket(socketConnection))
   }, [])
 
   
   useEffect(() => {
-    socket.current?.emit("sendUserId", currentUser?._id);
-    socket.current?.on("getUsers", users => {
+    socket?.emit("sendUserId", currentUser?._id);
+    socket?.on("getUsers", users => {
       setOnlineUsers(users.filter(user => user?.userId !== currentUser?._id))
     });
 
-    socket.current?.on("getMessage", data => {
+    socket?.on("getMessage", data => {
       setArrivalMessage({
         senderId: data?.senderId,
         text: data?.text,
@@ -67,21 +85,6 @@ const MessengerComponents = () => {
     getConversation();
   }, []);
 
-  // get all messages in a partcular conversation
-  useEffect(() => {
-    if (!currentChat) return;
-    const getConversationMessages = async () => {
-      try {
-        const res = await publicReq.get("/messages/" + currentChat?._id);
-        setMessages(res?.data);
-      } catch (error) {
-        console.log("Error fetching conversation's messages: ", error);
-      }
-    };
-
-    getConversationMessages();
-  }, [currentChat]);
-
   // fetch current user's updated info
   useEffect(() => {
     const fetchCurrentUserDetails = async () => {
@@ -98,6 +101,8 @@ const MessengerComponents = () => {
   // submit message
   const handleSubmit = async (e) => {
     e.preventDefault();
+    dispatch(sendingMessage(true));
+
     if (!newMessage.trim()) return;
 
     const message = {
@@ -108,7 +113,7 @@ const MessengerComponents = () => {
 
     const receiverId = currentChat.members?.find(member => member !== currentUser?._id)
 
-    socket.current?.emit("sendMessage", {
+    socket?.emit("sendMessage", {
       senderId: currentUser?._id,
       receiverId,
       text: newMessage
@@ -125,6 +130,8 @@ const MessengerComponents = () => {
     } catch (error) {
       console.log("error submiting message: ", error);
     }
+
+    dispatch(sendingMessage(false))
 
     setNewMessage("");
   };
@@ -161,6 +168,10 @@ const MessengerComponents = () => {
     return conversation?.members?.find((m) => m !== currentUser?._id)
   }
 
+  const setConversation = (conv) => {
+    dispatch(updateCurrentChat(conv))
+  }
+
   return (
     <div className="messenger_Wrapper">
       <TopBar />
@@ -171,13 +182,13 @@ const MessengerComponents = () => {
               type="text"
               placeholder="Search for friends"
               className="chatMenu_input"
-            />
+            /> 
             <div className="conversations_container">
               {conversations?.map((c, i) => (
                 <div
                   style={{ width: "100%" }}
                   key={i}
-                  onClick={() => setCurrentChat(c)}
+                  onClick={() => setConversation(c)}
                 >
                   <Conversations
                     conversation={c}

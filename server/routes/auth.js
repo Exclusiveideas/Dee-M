@@ -43,7 +43,7 @@ router.post("/register", async (req, res) => {
 });
 
 //LOGIN
-router.post("/login", async (req, res) => {
+router.get("/login", async (req, res) => {
     const { username, password: formPassword } = req.body;
     try {
         const user = await User.findOne({ username});

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .topContainer {
+            width: 100vw;
+            background-color: blue;
+            height: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .topWrapper {
+            width: 95%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            color: white;
+        }
+
+        .hamburger_icon {
+            cursor: pointer;
+        }
+
+        .drop_down {
+            height: 100%;
+            background-color: rgb(71, 71, 71);
+            color: white;
+            width: 100%;
+            display: none;
+        }
+
+        .show_dropDown {
+            display: block;
+        }
+
+        .list_item {
+            cursor: pointer;
+            border-bottom: 1px solid gray;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="topContainer">
+        <div class="topWrapper">
+            <h3 class="logo">LOGO</h3>
+            <button class="hamburger_icon">ICON</button>
+        </div>
+        <div class="drop_down">
+                <div class="list_item">one</div>
+                <div class="list_item">two</div>
+                <div class="list_item">three</div>
+                <div class="list_item">four</div>
+        </div>
+
+
+        <div style="background-color: red; color: white; padding: 5px;">some paragraph text goes here</div>
+
+
+
+
+
+
+    </div>
+    <script>
+        const buttonEl = document.getElementsByClassName("hamburger_icon");
+        const dropDownEl = document.getElementsByClassName("drop_down");
+
+        buttonEl[0].addEventListener("click", () => {
+            dropDownEl[0].classList.toggle("show_dropDown");
+        })
+    </script>
+
+</body>
+</html>

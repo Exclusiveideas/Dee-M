@@ -8,6 +8,10 @@
     min-width: 260px;
 }
 
+.conversation.activeChat {
+    background-color: rgba(29, 29, 29, 0.486);
+}
+
 .conversation:hover {
     background-color: rgba(29, 29, 29, 0.486);
 }
